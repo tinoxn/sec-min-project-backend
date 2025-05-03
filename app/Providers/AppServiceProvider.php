@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Repositories\Implementations\ProductRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Interfaces\OrderRepositoryInterface;
 use App\Repositories\Implementations\OrderRepository;
+use App\Repositories\Interfaces\ProductRepositoryInterface;
 use Illuminate\Support\Facades\Route;
 
 
@@ -15,7 +17,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+        $this->app->bind(
+            OrderRepositoryInterface::class,
+            OrderRepository::class
+        );
+
+        $this->app->bind(
+            ProductRepositoryInterface::class,
+            ProductRepository::class
+        );
     }
 
     /**
