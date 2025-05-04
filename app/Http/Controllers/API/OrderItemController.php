@@ -32,7 +32,7 @@ class OrderItemController extends Controller
      *     tags={"Order Items"},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/OrderItemRequest")
+     *         @OA\JsonContent(ref="#/components/schemas/OrderItem")
      *     ),
      *     @OA\Response(
      *         response=201,
@@ -86,7 +86,7 @@ class OrderItemController extends Controller
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/OrderItemRequest")
+     *         @OA\JsonContent(ref="#/components/schemas/OrderItem")
      *     ),
      *     @OA\Response(
      *         response=200,
