@@ -267,6 +267,132 @@
                 }
             }
         },
+        "/api/order-items": {
+            "post": {
+                "tags": [
+                    "Order Items"
+                ],
+                "summary": "Create an order item",
+                "operationId": "1fa1e1f5c18b19fdaba4e08c27d16a04",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderItem"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order item created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderItemResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/order-items/{id}": {
+            "get": {
+                "tags": [
+                    "Order Items"
+                ],
+                "summary": "Get a specific order item",
+                "operationId": "8db93e729a0f278f71007a7d4cfd846b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the order item",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderItemResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Order Items"
+                ],
+                "summary": "Update an order item",
+                "operationId": "4feea364a5d4525f8aacfbae57eb35e9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the order item",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderItem"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order item updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderItemResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Order Items"
+                ],
+                "summary": "Delete an order item",
+                "operationId": "cef28e5ba5671e27cb5e871bd8db0755",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the order item",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully"
+                    }
+                }
+            }
+        },
         "/api/products": {
             "get": {
                 "tags": [
@@ -341,6 +467,67 @@
     },
     "components": {
         "schemas": {
+            "OrderItemResource": {
+                "title": "Order Item Resource",
+                "description": "Order Item Resource Response",
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/OrderItem"
+                    }
+                },
+                "type": "object"
+            },
+            "OrderItem": {
+                "title": "Order Item",
+                "required": [
+                    "order_id",
+                    "product",
+                    "price",
+                    "quantity",
+                    "total"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "order_id": {
+                        "description": "ID of the related order",
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "product": {
+                        "description": "Product name or description",
+                        "type": "string",
+                        "example": "Wireless Headphones"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 99.99
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 199.98
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-05-04T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-05-04T12:10:00Z"
+                    }
+                },
+                "type": "object"
+            },
             "Product": {
                 "title": "Product",
                 "required": [
@@ -385,6 +572,10 @@
         {
             "name": "Products",
             "description": "Product management endpoints"
+        },
+        {
+            "name": "Order Items",
+            "description": "Order Items"
         }
     ]
 }
