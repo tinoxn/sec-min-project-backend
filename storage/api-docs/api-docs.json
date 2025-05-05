@@ -709,7 +709,6 @@
                 "type": "object"
             },
             "Product": {
-                "title": "Product",
                 "required": [
                     "id",
                     "name",
@@ -722,22 +721,24 @@
                     },
                     "name": {
                         "type": "string",
-                        "example": "Bluetooth Speaker"
+                        "example": "Laptop"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "High-performance laptop"
                     },
                     "price": {
                         "type": "number",
                         "format": "float",
-                        "example": 49.99
+                        "example": 999.99
                     },
                     "created_at": {
                         "type": "string",
-                        "format": "date-time",
-                        "example": "2024-05-01T10:00:00Z"
+                        "format": "date-time"
                     },
                     "updated_at": {
                         "type": "string",
-                        "format": "date-time",
-                        "example": "2024-05-01T12:00:00Z"
+                        "format": "date-time"
                     }
                 },
                 "type": "object"

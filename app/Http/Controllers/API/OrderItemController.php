@@ -70,7 +70,7 @@ class OrderItemController extends Controller
      */
     public function show(OrderItem $orderItem): JsonResponse
     {
-        $orderItem->load('product'); // <-- Add this
+        $orderItem->load('product');
 
         return response()->json(new OrderItemResource($orderItem)); // ✅ wrap here too
     }
