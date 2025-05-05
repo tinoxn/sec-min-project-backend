@@ -14,11 +14,10 @@ class OrderFactory extends Factory
     {
         return [
             'customer_name' => $this->faker->name(),
+            'order_number' => $this->faker->unique()->bothify('ORD-#####'),
+            'customer_code' => $this->faker->bothify('CUST-#####'),
             'status'        => $this->faker->randomElement(['pending', 'shipped', 'completed', 'cancelled']),
             'order_date'    => $this->faker->date(),
-            // total_price will be computed in  repository/service,
-            // but we can set a placeholder or leave as zero:
-            'total_price'   => 0,
         ];
     }
 
@@ -39,9 +38,6 @@ class OrderFactory extends Factory
                 $itemData['total']    = $itemData['price'] * $itemData['quantity'];
                 $order->items()->create($itemData);
             }
-
-            // Recompute total_price on the order
-            $order->total_price = $order->items->sum('total');
             $order->save();
         });
     }

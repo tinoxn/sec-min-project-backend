@@ -11,12 +11,20 @@ class OrderItemResource extends JsonResource
         return [
             'id' => $this->id,
             'order_id' => $this->order_id,
-            'product' => $this->product,
+            'product_id' => $this->product_id,
             'quantity' => $this->quantity,
-            'price' => $this->price,
-            'total' => $this->total,
+            'price' => (float) $this->price,
+            'total' => (float) $this->total,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
+            'product' => $this->whenLoaded('product', function () {
+                return [
+                    'id' => $this->product->id,
+                    'name' => $this->product->name,
+                    'price' => $this->product->price
+
+                ];
+            }),
         ];
     }
 }

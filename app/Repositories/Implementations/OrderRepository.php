@@ -26,7 +26,6 @@ class OrderRepository implements OrderRepositoryInterface
     {
         $order = Order::create($data);
         $order->items()->createMany($data['items']);
-        $order->total_price = $order->items->sum('total');
         $order->save();
 
         return $order;
@@ -42,7 +41,6 @@ class OrderRepository implements OrderRepositoryInterface
             $order->items()->createMany($data['items']);
         }
 
-        $order->total_price = $order->items->sum('total');
         $order->save();
 
         return $order;

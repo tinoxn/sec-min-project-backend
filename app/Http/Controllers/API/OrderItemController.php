@@ -44,6 +44,7 @@ class OrderItemController extends Controller
     public function store(OrderItemRequest $request): JsonResponse
     {
         $item = $this->orderItemService->create($request->validated());
+        $item->load('product'); // <-- Add this
 
         return response()->json(new OrderItemResource($item), Response::HTTP_CREATED);
     }
@@ -69,6 +70,8 @@ class OrderItemController extends Controller
      */
     public function show(OrderItem $orderItem): JsonResponse
     {
+        $orderItem->load('product');
+
         return response()->json(new OrderItemResource($orderItem));
     }
 
@@ -98,6 +101,7 @@ class OrderItemController extends Controller
     public function update(OrderItemRequest $request, OrderItem $orderItem): JsonResponse
     {
         $this->orderItemService->update($orderItem, $request->validated());
+        $orderItem->load('product');
 
         return response()->json(new OrderItemResource($orderItem));
     }
