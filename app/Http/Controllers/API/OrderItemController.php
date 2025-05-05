@@ -46,7 +46,7 @@ class OrderItemController extends Controller
         $item = $this->orderItemService->create($request->validated());
         $item->load('product'); // <-- Add this
 
-        return response()->json(new OrderItemResource($item), Response::HTTP_CREATED); // ✅ make sure you're wrapping it
+        return response()->json(new OrderItemResource($item), Response::HTTP_CREATED);
     }
 
     /**
@@ -72,7 +72,7 @@ class OrderItemController extends Controller
     {
         $orderItem->load('product');
 
-        return response()->json(new OrderItemResource($orderItem)); // ✅ wrap here too
+        return response()->json(new OrderItemResource($orderItem));
     }
 
     /**

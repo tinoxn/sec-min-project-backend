@@ -97,9 +97,10 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        return response()->json(
-            $this->orderService->getAll($request->all())
-        );
+        $orders = $this->orderService->getAll($request->all())
+            ->load(['items.product']); // Eager load items and their products
+
+        return response()->json($orders);
     }
 
     /**
