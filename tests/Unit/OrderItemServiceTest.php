@@ -6,6 +6,8 @@ use Tests\TestCase;
 use App\Services\OrderItemService;
 use App\Repositories\Interfaces\OrderItemInterface;
 use App\Models\OrderItem;
+use App\Models\Product;
+use App\Repositories\Implementations\OrderItemRepository;
 use Mockery;
 
 class OrderItemServiceTest extends TestCase
@@ -18,26 +20,23 @@ class OrderItemServiceTest extends TestCase
 
     public function test_create_order_item_calls_repository()
     {
-        $data = [
-            'order_id'    => 1,
-            'product'     => 'Widget',
-            'quantity'    => 3,
-            'price'       => 9.99,
-            'total'       => 29.97,
-        ];
-        $mockRepo = Mockery::mock(OrderItemInterface::class);
-        $mockItem = new OrderItem($data);
+        $mockRepo = $this->createMock(OrderItemRepository::class);
+        $product = new Product(['name' => 'Widget']);
+        $orderItem = new OrderItem();
+        $orderItem->setRelation('product', $product);
 
-        $mockRepo->shouldReceive('create')
-            ->once()
+        $data = ['product_id' => 1, 'quantity' => 2];
+
+        $mockRepo->expects($this->once())
+            ->method('create')
             ->with($data)
-            ->andReturn($mockItem);
+            ->willReturn($orderItem);
 
         $service = new OrderItemService($mockRepo);
         $result = $service->create($data);
 
         $this->assertInstanceOf(OrderItem::class, $result);
-        $this->assertEquals('Widget', $result->product);
+        $this->assertEquals('Widget', $result->product->name); // Check product name via relationship
     }
 
     public function test_update_order_item_calls_repository()

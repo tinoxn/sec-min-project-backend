@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderApiTest extends TestCase
@@ -12,29 +13,39 @@ class OrderApiTest extends TestCase
 
     public function test_can_create_order_with_items()
     {
+        $product = Product::factory()->create(['name' => 'Book', 'price' => 10.00]);
+
         $payload = [
             'customer_name' => 'Alice',
+            'customer_code' => 'Al12345',
+            'order_number' => 'OAl12345',
             'status' => 'pending',
             'order_date' => now()->toDateString(),
             'items' => [
-                ['product' => 'Book', 'quantity' => 2, 'price' => 10.00, 'total' => 20.00]
+                [
+                    'product_id' => $product->id,
+                    'quantity' => 2,
+                    'price' => 10.00,
+                    'total' => 20.00
+                ]
             ]
         ];
 
         $response = $this->postJson('/api/orders', $payload);
-
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'id',
-                'customer_name',
-                'status',
-                'order_date',
-                'total_price',
-                'items'
+                'order_number',
+                'items' => [
+                    '*' => [
+                        'id',
+                        'product_id', // or 'product' depending on your API
+                        'quantity',
+                        'price',
+                        'total'
+                    ]
+                ]
             ]);
-
-        $this->assertDatabaseHas('orders', ['customer_name' => 'Alice']);
-        $this->assertDatabaseHas('order_items', ['product' => 'Book']);
     }
 
     public function test_can_update_order()

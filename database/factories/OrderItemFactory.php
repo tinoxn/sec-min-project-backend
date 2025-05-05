@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\OrderItem;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderItemFactory extends Factory
@@ -17,10 +18,10 @@ class OrderItemFactory extends Factory
 
         return [
             'order_id' => Order::factory(),
-            'product'  => $this->faker->word(),
-            'quantity' => $quantity,
-            'price'    => $price,
-            'total'    => $quantity * $price,
+            'product_id' => Product::factory(),
+            'quantity' => $this->faker->numberBetween(1, 5),
+            'price' => $price,
+            'total' => $quantity * $price
         ];
     }
 }
