@@ -1,0 +1,31 @@
+services:
+  order:
+    image: order
+    build: 
+      context: .
+    ports:
+      - "8009:8181"
+    depends_on:
+      - order-db
+    networks:
+      - order-network 
+    restart: always
+  order-db:
+    image: mysql:8
+    environment:
+      # MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_DATABASE: $DB_DATABASE
+      # MYSQL_USER: $DB_USERNAME
+      # MYSQL_PASSWORD: $DB_PASSWORD
+    volumes:
+      - order:/var/lib/mysql
+    networks: 
+      - order-network
+
+networks: 
+  order-network:
+    external: false
+volumes:
+  order:
+     external: true

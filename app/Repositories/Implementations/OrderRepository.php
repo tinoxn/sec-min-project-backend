@@ -25,8 +25,8 @@ class OrderRepository implements OrderRepositoryInterface
     public function create(array $data)
     {
         $order = Order::create($data);
-        $order->items()->createMany($data['items']);
-        $order->save();
+        // $order->items()->createMany($data['items']);
+        // $order->save();
 
         return $order;
     }
