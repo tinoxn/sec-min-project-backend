@@ -1,61 +1,203 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Order Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A full-featured, well-structured Order Management RESTful API built using Laravel, following **SOLID principles**, with proper **service layers**, **repository pattern**, and **Swagger API documentation**. Now fully **Dockerized** for easy local development.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🛠️ Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   Product Management: Add and list products
+-   Order Management: Create, view, update, and delete orders
+-   Order Items: Handle multiple items per order
+-   Swagger (OpenAPI) documentation
+-   Follows SOLID principles and clean architecture
+-   Includes unit tests for services
+-   Uses Laravel Resource for consistent API responses
+-   Dockerized with PHP, MySQL, and Nginx
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🐳 Docker Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. Clone the repository
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+git clone https://github.com/your-username/order-management-api.git
+cd order-management-api
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2. Build and start containers
 
-## Laravel Sponsors
+```bash
+docker-compose up -d --build
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 3. Install dependencies inside container
 
-### Premium Partners
+Install dependency in container is done automaticaly but you can manually by following this steps
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+docker exec -it app bash
+composer install
+php artisan key:generate
+php artisan migrate
+exit
+```
 
-## Contributing
+### 4. Access the app
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+-   API: `http://localhost:8000/api`
+-   Swagger docs: `http://localhost:8000/api/documentation`
+-   phpMyAdmin (if included): `http://localhost:8080`
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🧾 Environment Configuration
 
-## Security Vulnerabilities
+Copy `.env.example`:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+cp .env.example .env
+```
 
-## License
+Ensure the DB variables in `.env` match your Docker setup:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=order_db
+DB_USERNAME=root
+DB_PASSWORD=root
+```
+
+---
+
+## 🔌 API Endpoints
+
+| Method | Endpoint     | Description          |
+| ------ | ------------ | -------------------- |
+| GET    | /products    | List all products    |
+| POST   | /products    | Create a new product |
+| GET    | /orders      | List all orders      |
+| POST   | /orders      | Create a new order   |
+| GET    | /orders/{id} | Show specific order  |
+| PUT    | /orders/{id} | Update an order      |
+| DELETE | /orders/{id} | Delete an order      |
+| POST   | /order-items | Add item to order    |
+
+---
+
+## 📄 API Documentation (Swagger)
+
+Visit:
+
+```
+http://localhost:8000/api/documentation
+```
+
+---
+
+## 🧪 Running Tests
+
+```bash
+docker exec -it app bash
+php artisan test
+```
+
+---
+
+## 📁 Project Structure
+
+```
+app/
+├── Http/
+│   ├── Controllers/API/
+│   ├── Requests/
+│   ├── Resources/
+├── Models/
+├── Services/
+├── Repositories/
+│   ├── Interfaces/
+│   ├── Implementations/
+routes/
+├── api.php
+tests/
+├── Unit/
+docker-compose.yml
+Dockerfile
+```
+
+---
+
+## 👨‍💻 Author
+
+Built by Valentin Niyonshuti.
+
+### 🐳 Running with Docker
+
+Ensure Docker and Docker Compose are installed.
+
+```bash
+docker-compose up --build
+```
+
+This will:
+
+-   Build the Laravel API container with PHP 8.2
+-   Spin up a MySQL 8 database
+-   Run migrations automatically
+-   Serve the app on `http://localhost:8009`
+
+**docker-compose.yml**
+
+```yaml
+version: "3.8"
+
+services:
+    order:
+        build:
+            context: .
+        ports:
+            - "8009:8181"
+        depends_on:
+            - order-db
+        networks:
+            - order-network
+        restart: always
+
+    order-db:
+        image: mysql:8
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: true
+            MYSQL_DATABASE: order_db
+        volumes:
+            - order:/var/lib/mysql
+        networks:
+            - order-network
+
+networks:
+    order-network:
+        driver: bridge
+
+volumes:
+    order:
+```
+
+Remember to create docker volume
+
+```
+docker volume create order
+```
+
+## Future recommendation
+
+### Authentication & Authorization
+
+-   Add Laravel Sanctum or Passport for secure API access.
+
+-   Role-based access control (Admin, Manager, User).
+
+### Performance & Caching
+
+Cache common queries like product lists or frequent orders.

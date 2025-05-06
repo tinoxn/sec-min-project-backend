@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\OrderService;
+use DB;
 
 /**
  * @OA\Tag(
@@ -168,15 +169,35 @@ class OrderController extends Controller
             'items.*.total' => 'required|numeric|min:0',
         ]);
 
-        $order = $this->orderService->create($validated);
+        // Start a database transaction
+        DB::beginTransaction();
 
-        if (isset($validated['items'])) {
-            $order->items()->createMany($validated['items']);
+        try {
+            // Create just the order
+            $order = $this->orderService->create(
+                collect($validated)->except('items')->toArray()
+            );
+
+            // Create order items
+            foreach ($validated['items'] as $item) {
+                $order->items()->create($item);
+            }
+
+            // Commit transaction
+            DB::commit();
+
+            // Load items with product relationship
+            $order->load(['items.product']);
+
+            return response()->json($order, 201);
+        } catch (\Exception $e) {
+            // Rollback transaction on error
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Failed to create order',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $order->load('items');
-
-        return response()->json($order, 201);
     }
 
     /**

@@ -13,39 +13,62 @@ class OrderApiTest extends TestCase
 
     public function test_can_create_order_with_items()
     {
-        $product = Product::factory()->create(['name' => 'Book', 'price' => 10.00]);
+        $product = Product::factory()->create();
 
         $payload = [
-            'customer_name' => 'Alice',
-            'customer_code' => 'Al12345',
-            'order_number' => 'OAl12345',
+            'order_number' => 'ORD-123',
+            'customer_name' => 'John Doe',
+            'customer_code' => 'CUST001',
             'status' => 'pending',
-            'order_date' => now()->toDateString(),
+            'order_date' => now()->format('Y-m-d'),
             'items' => [
                 [
                     'product_id' => $product->id,
                     'quantity' => 2,
-                    'price' => 10.00,
-                    'total' => 20.00
+                    'price' => $product->price,
+                    'total' => $product->price * 2
                 ]
             ]
         ];
 
         $response = $this->postJson('/api/orders', $payload);
+
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'id',
                 'order_number',
+                'customer_name',
+                'customer_code',
+                'status',
+                'order_date',
                 'items' => [
                     '*' => [
                         'id',
-                        'product_id', // or 'product' depending on your API
+                        'product_id',
                         'quantity',
                         'price',
-                        'total'
+                        'total',
+                        'product' => [
+                            'id',
+                            'name',
+                            // other product fields
+                        ]
                     ]
                 ]
             ]);
+
+        // Verify database state
+        $this->assertDatabaseHas('orders', [
+            'order_number' => 'ORD-123',
+            'customer_name' => 'John Doe'
+        ]);
+
+        $orderId = $response->json('id');
+        $this->assertDatabaseHas('order_items', [
+            'order_id' => $orderId,
+            'product_id' => $product->id,
+            'quantity' => 2
+        ]);
     }
 
     public function test_can_update_order()
